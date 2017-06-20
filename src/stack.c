@@ -53,7 +53,7 @@ void stack_free(Stack *stack)
 	if (stack->buf != NULL) {
 		if (stack->dtor != NULL) { /* call dtor on elements */
 			size_t i;
-			for (i=0; i<stack->buf_size; ++i) {
+			for (i=0; i<stack->sp; ++i) {
 				(*(stack->dtor))(stack->buf[i]);
 			}
 		}
