@@ -20,9 +20,14 @@
 #ifndef TREE_SET_HEADER
 #define TREE_SET_HEADER
 
+#include <stddef.h>
+
 typedef struct TreeSet TreeSet;
 
-TreeSet* make_tree_set(size_t size, int (*cmp)(void*, void*));
+TreeSet* make_tree_set(
+	size_t size,
+	int (*cmp)(void*, void*),
+	void (*dtor)(void*));
 void free_tree_set(TreeSet *tree_set);
 
 int tree_set_insert(TreeSet *tree_set, void *elem);
