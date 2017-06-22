@@ -85,3 +85,31 @@ void free_tree_set(TreeSet *tree_set)
 	stack_free(tree_set->unused_nodes);
 	free(tree_set);
 }
+
+int tree_set_insert(TreeSet *tree_set, void *elem)
+{
+	struct rb_node *node = stack_pop(tree_set->unused_nodes);
+
+	if (node == NULL) { /* need to realloc more memory */
+		size_t i;
+		size_t const old_size = tree_set->buf_size;
+		size_t const new_size = 2 * old_size;
+
+		struct rb_node *buf = realloc(tree_set->buf, new_size);
+		if (buf == NULL) return 0; /* TODO signal error here */
+
+		tree_set->buf = buf;
+		tree_set->buf_size = new_size;
+
+		for (i=old_size; i<new_size-1; ++i) {
+			if(!stack_push(tree_set->unused_nodes, &buf[i])) {
+				return 0; /* TODO signal error here */
+			}
+		}
+
+		node = &tree_set->buf[new_size-1];
+	}
+
+	node->key = elem;
+	return rb_tree_insert(&(tree_set->root), node, tree_set->cmp);
+}
