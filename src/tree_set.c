@@ -95,7 +95,8 @@ int tree_set_insert(TreeSet *tree_set, void *elem)
 		size_t const old_size = tree_set->buf_size;
 		size_t const new_size = 2 * old_size;
 
-		struct rb_node *buf = realloc(tree_set->buf, new_size);
+		struct rb_node *buf =realloc(tree_set->buf,
+			new_size * sizeof(struct rb_node));
 		if (buf == NULL) return 0; /* TODO signal error here */
 
 		tree_set->buf = buf;
