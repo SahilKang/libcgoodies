@@ -161,3 +161,9 @@ void* tree_set_min(TreeSet *tree_set)
 	struct rb_node * const node = rb_tree_min(tree_set->root);
 	return node == NULL ? NULL : node->key;
 }
+
+void* tree_set_max(TreeSet *tree_set)
+{
+	struct rb_node * const node = rb_tree_max(tree_set->root);
+	return node == NULL ? NULL : node->key;
+}
