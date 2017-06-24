@@ -172,3 +172,10 @@ size_t tree_set_size(TreeSet *tree_set)
 {
 	return tree_set->buf_size - stack_size(tree_set->unused_nodes);
 }
+
+int tree_set_contains(TreeSet *tree_set, void *elem)
+{
+	struct rb_node * const node =
+		rb_tree_search(tree_set->root, elem, tree_set->cmp);
+	return node != NULL;
+}

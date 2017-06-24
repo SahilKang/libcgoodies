@@ -38,6 +38,6 @@ void* tree_set_max(TreeSet *tree_set);
 
 size_t tree_set_size(TreeSet *tree_set);
 
-int tree_set_contains(TreeSet *tree_set);
+int tree_set_contains(TreeSet *tree_set, void *elem);
 
 #endif
