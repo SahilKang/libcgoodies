@@ -94,6 +94,7 @@ int tree_set_insert(TreeSet *tree_set, void *elem)
 		size_t i;
 		size_t const old_size = tree_set->buf_size;
 		size_t const new_size = 2 * old_size;
+		struct rb_node * const old_ptr = tree_set->buf;
 
 		struct rb_node *buf =realloc(tree_set->buf,
 			new_size * sizeof(struct rb_node));
@@ -101,6 +102,34 @@ int tree_set_insert(TreeSet *tree_set, void *elem)
 
 		tree_set->buf = buf;
 		tree_set->buf_size = new_size;
+
+		/* realloc moved the array so we have to update
+		 * the parent, left, and right pointers of the
+		 * currently used nodes.
+		 */
+		if (tree_set->buf != old_ptr) {
+			ptrdiff_t diff;
+			struct rb_node n;
+
+			for (i=0; i<old_size; ++i) {
+				n = tree_set->buf[i];
+
+				if (n.parent != NULL) {
+					diff = n.parent - old_ptr;
+					n.parent = &tree_set->buf[diff];
+				}
+
+				if (n.left != NULL) {
+					diff = n.left - old_ptr;
+					n.left = &tree_set->buf[diff];
+				}
+
+				if (n.right != NULL) {
+					diff = n.right - old_ptr;
+					n.right = &tree_set->buf[diff];
+				}
+			}
+		}
 
 		for (i=old_size; i<new_size-1; ++i) {
 			if(!stack_push(tree_set->unused_nodes, &buf[i])) {
