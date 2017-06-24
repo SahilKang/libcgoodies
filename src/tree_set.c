@@ -143,3 +143,15 @@ int tree_set_insert(TreeSet *tree_set, void *elem)
 	node->key = elem;
 	return rb_tree_insert(&(tree_set->root), node, tree_set->cmp);
 }
+
+int tree_set_remove(TreeSet *tree_set, void *elem)
+{
+	struct rb_node *node =
+		rb_tree_search(tree_set->root, elem, tree_set->cmp);
+
+	if (node == NULL) return 0; /* elem does not exist in tree_set */
+
+	rb_tree_delete(&tree_set->root, node);
+	stack_push(tree_set->unused_nodes, node); /* TODO handle error */
+	return 1;
+}
