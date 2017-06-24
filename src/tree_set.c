@@ -155,3 +155,9 @@ int tree_set_remove(TreeSet *tree_set, void *elem)
 	stack_push(tree_set->unused_nodes, node); /* TODO handle error */
 	return 1;
 }
+
+void* tree_set_min(TreeSet *tree_set)
+{
+	struct rb_node * const node = rb_tree_min(tree_set->root);
+	return node == NULL ? NULL : node->key;
+}
