@@ -167,3 +167,8 @@ void* tree_set_max(TreeSet *tree_set)
 	struct rb_node * const node = rb_tree_max(tree_set->root);
 	return node == NULL ? NULL : node->key;
 }
+
+size_t tree_set_size(TreeSet *tree_set)
+{
+	return tree_set->buf_size - stack_size(tree_set->unused_nodes);
+}
